@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>animation spaceship</title>
+<meta name="generator" content="Bluefish 2.2.5" >
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+
+<style>
+body {
+	background-color: black;
+}
+
+canvas {
+	border: 1px solid black;
+}
+
+</style>
+
+</head>
+<body>
+
+<canvas id="demoCanvas" width="500" height="500"></canvas>
+
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+
+<script>
+
+var stage = new createjs.Stage("demoCanvas");
+var circle, firkant, img, ufo;
+var score = 0;
+var ifoX = 250;
+
+function cirkel(x) {
+
+	/* colors */
+	this.colors = ["green","yellow","violet","pink"]
+
+	/* define the shape */
+	var circle = new createjs.Shape();
+	circle.graphics
+		.beginFill(this.colors[Math.floor(Math.random()*this.colors.length)])
+		.drawCircle(0, 0, Math.floor(Math.random()*10)+5);
+	circle.x = x;
+	circle.y = 400;
+	
+	/* add to stage */
+	stage.addChild(circle);
+
+	
+	/* tween to */
+	createjs.Tween.get(circle, { loop: false })
+  .to({ y: 0 }, 500, createjs.Ease.getPowInOut(4))
+  .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
+  .to({ alpha: 0.24, y: 0 }, 100)
+  .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
+  .to({ y: -1000 }, 800, createjs.Ease.getPowInOut(2));
+
+	/* remove bullet */
+	//stage.removeChild(circle); 
+
+	console.log("cirkel() ok");
+	
+	
+};
+
+function tegnFirkant(x,y) {
+
+	this.colors = ["rgba(0,0,200,.25)","blue","violet"];
+
+	// create shape
+	this.firkant = new createjs.Shape();
+ 	this.firkant.graphics.beginFill(this.colors[Math.floor(Math.random()*this.	colors.length)]).drawRect(0, 0, 10, 10);
+ 	this.firkant.x = Math.floor(Math.random()*500);
+ 	this.firkant.y = Math.floor(Math.random()*500);
+ 	
+	  /* tween to */
+		createjs.Tween.get(this.firkant, { loop: false })
+  		.to({ y: Math.floor(Math.random()*500) }, 3000, createjs.Ease.getPowInOut(4))
+	  .to({ alpha: 0.12, y: Math.floor(Math.random()*500), x: 400 }, Math.floor(Math.random()*500), createjs.Ease.getPowInOut(2))
+	  .to({ alpha: 0.12, y: Math.floor(Math.random()*500), x: 300 }, Math.floor(Math.random()*500))
+	  .to({ alpha: 0.56, y: Math.floor(Math.random()*500) }, 10000)
+	  .to({ alpha: 0.33, y: Math.floor(Math.random()*500) }, 500, createjs.Ease.getPowInOut(2))
+	  .to({ y: 1000 }, 3000, createjs.Ease.getPowInOut(2));
+ 	
+ 	
+	// add to stage
+	stage.addChild(this.firkant);
+	
+	
+	console.log("tegner firkant");
+	
+}
+
+function ifo(x) {	
+	
+	//this.x = ifoX;
+	this.y = 500;
+	var img = new createjs.Bitmap("images/viper-mark-ii.png");
+	stage.addChild(img);
+	img.x = ifoX;
+	img.y = this.y;
+	img.rotation = 180;
+	
+	img.addEventListener("click", function(event){
+            this.stage.removeChild(event.target);
+				stage.addChild(img);
+		
+			  /* tween to */
+			  /*
+				createjs.Tween.get(img, { loop: false })
+			  .to({ y: 500 }, 10, createjs.Ease.getPowInOut(2))
+			  .to({ alpha: 1, y: 175 }, 400, createjs.Ease.getPowInOut(2))
+			  .to({ alpha: 1, y: 400, x: 333 }, 100)
+			  .to({ alpha: 0, y: 100, x: 100 }, 300)
+			  .to({ alpha: 1, y: 500 }, 50, createjs.Ease.getPowInOut(5))
+			  .to({ y: 500 }, 800, createjs.Ease.getPowInOut(2));
+				*/
+				cirkel(img.x-50	); // somewhat okish
+
+            this.stage.update();
+        }.bind(this));
+        
+	img.addEventListener("keyup", function(event){
+			console.log("keyup");
+	});
+}
+
+
+
+/* user input */
+
+/* main loop (autorunning function) */
+(function init(){
+
+	/* add shapes via function */
+	ifo(ifoX);
+		
+	/* instatiate an object */
+	var fk1 = new tegnFirkant();
+	var fk1 = new tegnFirkant();
+
+	createjs.Ticker.setFPS(60);
+	createjs.Ticker.addEventListener("tick", stage);
+	
+
+})();
+
+
+/* key detect (space) */
+document.onkeydown = keyDown;
+
+function keyDown(e) {
+    switch(e.keyCode) {
+        case 32:
+            console.log("space");
+       		cirkel(ifoX-65);
+       		//ifoX += 50;    
+            break;
+            
+         case 38:
+        console.log("key up");
+ 			var nyKant = tegnFirkant(100,100);
+        break;
+        }
+        
+    }
+
+
+
+
+/* hit detection */
+
+</script>
+
+</body>
+</html>
