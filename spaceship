@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Interaction</title>
+<meta name="generator" content="Bluefish 2.2.5" >
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+
+<style>
+canvas {
+	border: 1px solid black;
+	background-color: #000;
+}
+
+#spaceship {
+	display: none;
+}
+
+</style>
+
+</head>
+<body>
+
+<canvas id="demoCanvas" width="500" height="500"></canvas>
+
+<!-- graphics -->
+<img src="images/viper-mark-ii.png" width="128" height="128" alt="spaceship" longdesc="http://icons.iconseeker.com/png/fullsize/baby-spaceships/viper-mark-ii.png" id="spaceship">
+
+<!-- buttons -->
+<div>
+
+<input type="submit" id="left_btn" name="left" value="left" onclick="moveLeft()">
+<input type="submit" id="left_btn" name="left" value="right" onclick="moveRight()">
+
+</div>
+
+<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+
+<script>
+
+var stage = new createjs.Stage("demoCanvas");
+var circle, firkant, img, rumskib, astroide;
+var score = 0;
+var ufoX = 300;
+var ufoY = 450;
+var toLeft = false;
+
+function cirkel() {
+
+	/* define the shape */
+	this.circle = new createjs.Shape();
+	this.circle.graphics.beginFill("silver").drawCircle(0, 0, 35);
+	this.circle.x = 200;
+	this.circle.y = 0;
+	
+	/* add to stage */
+	stage.addChild(this.circle);
+
+	
+	/* tween to */
+	createjs.Tween.get(this.circle, { loop: true })
+  	.to({ y: 0 }, 0, createjs.Ease.getPowInOut(4))
+  	.to({ y: 53 }, 1110, createjs.Ease.getPowInOut(4))
+  	.to({ y: 1000 }, 4000, createjs.Ease.getPowInOut(2));
+
+	console.log("cirkel() ok");
+	
+};
+
+function tegnFirkant(x,y) {
+	// create shape
+	this.firkant = new createjs.Shape();
+ 	this.firkant.graphics.beginFill("#ff0000").drawRect(0, 0, 100, 100);
+ 	this.firkant.x = x;
+ 	this.firkant.y = y;
+ 	
+	// add to stage
+	stage.addChild(this.firkant);
+	
+	if (key = 39) {
+		this.firkant.x = this.firkant.x + 10;
+		
+	}
+	
+	console.log("tegner firkant");
+	
+}
+
+function ufo() {
+
+	this.img = new createjs.Bitmap("images/viper-mark-ii.png");
+	stage.addChild(this.img);
+	this.img.x = ufoX;
+	this.img.y = ufoY;
+	this.img.rotation = 180;	
+	
+	console.log("img viper-mark-ii on stage");
+}
+
+/* main loop (autorunning function) */
+(function init(){
+
+	astroide = new cirkel(); // for hittest: brug .x placering i stedet for tween
+
+	console.log(astroide.circle.y);
+
+	rumskib = new ufo(); // instance of the ufo object
+
+
+	createjs.Ticker.setFPS(60);
+	createjs.Ticker.addEventListener("tick", stage);
+
+})();
+
+/* react to user input */
+function moveRight(){
+
+	// the howto
+	// rumskib.img.x += 10;
+
+	// smooth movement
+	createjs.Tween.get(rumskib.img, { loop: false })
+	.to({ x: 450 }, 300, createjs.Ease.getPowInOut(4))
+	.to({ x: ufoX }, 1000, createjs.Ease.getPowInOut(4));
+
+	console.log("move right");
+}
+
+function moveLeft(){
+
+	// smooth movement
+	createjs.Tween.get(rumskib.img, { loop: false })
+	.to({ x: 150 }, 300, createjs.Ease.getPowInOut(4))
+	.to({ x: ufoX }, 1000, createjs.Ease.getPowInOut(4));
+
+	console.log("move left");
+}
+
+</script>
+
+</body>
+</html>
